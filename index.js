@@ -20,7 +20,18 @@ app.use(express.json());
 // Function to generate an image from Mermaid text using Puppeteer
 async function generateMermaidImage(mermaidText) {
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"], // Necessary for some environments like Heroku or Google Cloud
+       headless: true,
+    executablePath: process.env.CHROME_BIN || null, // Use CHROME_BIN environment variable if set
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--no-first-run",
+      "--no-zygote",
+      "--single-process",
+      "--disable-extensions"
+    ]
   });
   const page = await browser.newPage();
 
